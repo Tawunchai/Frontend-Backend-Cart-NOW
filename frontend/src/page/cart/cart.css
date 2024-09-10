@@ -1,0 +1,83 @@
+.cart {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.cartItem {
+  width: 700px;
+  height: 250px;
+  display: flex;
+
+  align-items: center;
+  box-shadow: 0px 3px 15px rgba(0, 0, 0, 0.2);
+  border-radius: 25px;
+  margin: 30px;
+}
+
+.cartItem img {
+  border-radius: 20px;
+  width: 280px;
+  margin-left: 25px;
+}
+
+.cartItem .description {
+  margin-left:25px;
+  margin-bottom: 30px;
+  margin-top: 50px;
+  margin-right: 25px;
+  width: 100%;
+  font-size: 30px;
+}
+
+.cartItem .description .text-lang{
+  font-size: 24px;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  color: rgb(157, 143, 65);
+}
+
+.cartItem .description .text-lang .Remove-button{
+  background-color: rgba(217, 160, 14, 0.848);
+  border: none;
+  color: aliceblue;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-size: 18px;
+  min-width: 120px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  border-radius: 15px;
+  margin-left: 25px;
+}
+
+.cartItem .description .text-lang .Remove-button:hover{
+  background-color: rgb(19, 19, 19);
+  color: white;
+  cursor: pointer;
+}
+
+.checkout .text-lang-total{
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  color: rgb(157, 143, 65);
+  font-size: 28px;
+}
+
+
+.countHandler input {
+  width: 40px;
+  text-align: center;
+  font-weight: bolder;
+}
+
+.checkout button {
+  width: 150px;
+  height: 50px;
+  background-color: rgb(19, 19, 19);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  margin: 10px;
+  cursor: pointer;
+}

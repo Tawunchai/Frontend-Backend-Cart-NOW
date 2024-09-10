@@ -1,0 +1,114 @@
+.shopTitle { /*Corse Top Logo*/
+  margin-top: 100px;
+  text-align: center;
+  font-size: 40px;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+/*string in title course*/
+.title{
+  text-align: auto;
+  font-size: 14px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.money-color{
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-size: 16px;
+  color: rgb(157, 143, 65);
+}
+
+/*ปรับขนาด 3*3 ไม่ต้องยุ่งดีกว่า*/
+.products {
+  width: 100%;
+  height: auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  place-items: center;
+}
+
+/*ปรับ Course Background*/
+.product {
+  border-radius: 15px;
+  background-color: rgb(255, 255, 255);
+  width: 400px;
+  height: 380px;
+  margin: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  box-shadow: 0px 3px 15px rgba(0, 0, 0, 0.2);
+  border-radius: 25px;
+  margin: 30px;
+}
+
+/*Example Background*/
+.Shop_Course {
+  width: 700px;
+  height: 250px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  align-items: center;
+  box-shadow: 0px 3px 15px rgba(0, 0, 0, 0.2);
+  border-radius: 25px;
+  margin: 30px;
+}
+
+/*ปรับขนาดรูปภาพ*/
+.product img {
+  width: 280px;
+  border-radius: 25px;
+  margin-bottom: 20px;
+}
+
+/*ปรับให้ตัวอักษรอยู่รงกลาง ไม่ยุ่งดีเเล้ว*/
+.product .description {
+  text-align: center;
+}
+
+/*ส่วนเสริม*/
+.product:hover {
+  transition: 0.3s ease-in;
+  cursor: pointer;
+}
+
+/*หลังจากนี้เกี่ยวกับปุ่มทำงาน*/
+
+.addToCartBttn {
+  background-color: transparent;
+  border: 2px solid rgb(19, 19, 19);
+  min-width: 100px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  border-radius: 15px;
+}
+
+.addToCartBttn:hover {
+  background-color: rgb(19, 19, 19);
+  color: white;
+  cursor: pointer;
+}
+
+.Payment{
+  margin-left: 15px;
+  background-color: transparent;
+  border: 2px solid rgb(19, 19, 19);
+  min-width: 100px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  border-radius: 15px;
+}
+
+.Payment:hover{
+  background-color: rgb(19, 19, 19);
+  color: white;
+  cursor: pointer;
+}

@@ -1,0 +1,36 @@
+.navbar {
+  width: 100%;
+  height: 95px;
+  background-color: rgb(19, 19, 19);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+}
+
+.logo {
+  width: 145px;
+  margin-top: 12px;
+}
+
+.right-section {
+  display: flex;
+  align-items: center;
+}
+
+.profile {
+  width: 90px;
+}
+
+.links {
+  display: flex;
+  align-items: center;
+  margin-left: 20px; /* เพิ่มระยะห่างระหว่าง Profile_User และลิงก์ */
+}
+
+.links a {
+  text-decoration: none;
+  color: white;
+  margin-left: 20px;
+  font-size: 25px;
+}
