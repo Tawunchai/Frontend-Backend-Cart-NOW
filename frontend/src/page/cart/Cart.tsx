@@ -79,7 +79,7 @@ const Cart: React.FC = () => {
                   id: item.CourseID!,
                   title: course.Title || "No Title",
                   price: course.Price ?? 0, // Use nullish coalescing to default to 0 if price is undefined
-                  profile: course.Profile || 'Course Image URL',
+                  profile: course.ProfilePicture || 'Course Image URL',
                   productName: course.Name || 'Product Name',
                 }}
                 onRemove={() => handleRemove(item.CourseID!)}

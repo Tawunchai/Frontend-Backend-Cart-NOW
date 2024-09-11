@@ -9,7 +9,7 @@ interface ProductProps {
 }
 
 export const Product: React.FC<ProductProps> = (props) => {
-  const { ID, Name, Title, Price, Profile } = props.data;
+  const { ID, Name, Title, Price, ProfilePicture } = props.data;
 
   const courseID = ID ?? -1;
   const coursePrice = Price ?? 0;
@@ -73,6 +73,7 @@ export const Product: React.FC<ProductProps> = (props) => {
 
   return (
     <div className="product">
+      <img src= {ProfilePicture} alt="" />
       <h2>{Name}</h2>
       <h3>{Title}</h3>
       <p>Price: ${Price}</p>

@@ -29,7 +29,7 @@ const CoursesList: React.FC = () => {
             Name: course.Name || "No",
             Title: course.Title || 'ไม่มีชื่อ',
             Price: course.Price || 0,
-            Profile: course.Profile || '', // Ensure Profile field is populated
+            ProfilePicture: course.ProfilePicture || '', // Ensure Profile field is populated
           }}
         />
       ))}

@@ -9,6 +9,7 @@ type Course struct {
 	Name    string
 	Title  string
 	Price    float64
+	ProfilePicture   string `gorm:"type:longtext"`
 	
 	Carts []Cart `gorm:"foreignKey:CourseID"`
 }
