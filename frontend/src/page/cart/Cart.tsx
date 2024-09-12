@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Space, Table, Button, Col, Row, Divider, message } from "antd";
-import { PlusOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons";
+import { Space, Table, Button, Col, Row, Divider, message, Card } from "antd";
+import {
+  PlusOutlined,
+  EditOutlined,
+  DeleteOutlined,
+  ShoppingOutlined,
+  FileDoneOutlined,
+} from "@ant-design/icons";
 import type { ColumnsType } from "antd/es/table";
 import { getAllCart, deleteCart, getCourseById } from "../../services/http";
 import { CartInterface } from "../../interface/ICart";
@@ -24,7 +30,7 @@ function Cart() {
       const carts = await getAllCart();
       const cartWithCourses: CartWithCourse[] = await Promise.all(
         carts.map(async (cart) => {
-          const course = await getCourseById(cart.CourseID!); // Assuming CourseID is always provided
+          const course = await getCourseById(cart.CourseID!);
           return {
             ...cart,
             Title: course.Title,
@@ -86,14 +92,16 @@ function Cart() {
       title: "Picture",
       dataIndex: "ProfilePicture",
       key: "ProfilePicture",
-      render: (text) => <img alt="course" src={text} style={{ width: "150px" }} />,
+      render: (text) => (
+        <img alt="course" src={text} style={{ width: "150px" }} />
+      ),
     },
     {
       title: "Delete",
       key: "Manage",
       render: (_, record) => (
         <Button
-          onClick={() => handleDelete(record.CourseID!)} // Call handleDelete directly
+          onClick={() => handleDelete(record.CourseID!)}
           style={{ marginLeft: 10 }}
           shape="circle"
           icon={<DeleteOutlined />}
@@ -107,14 +115,41 @@ function Cart() {
   return (
     <>
       {contextHolder}
-      <Row>
-        <Col span={12}>
-          <h2>Cart Course</h2>
-        </Col>
-      </Row>
-      <Divider />
-      <div style={{ marginTop: 20 }}>
-        <Table rowKey="CourseID" columns={columns} dataSource={cartItems} />
+      <div className="cart-payment">
+        <Row gutter={16}>
+          {/* Cart Course Section */}
+          <Col span={12}>
+            <div className="cart-course">
+              <h2>
+                <ShoppingOutlined /> Cart Course
+              </h2>
+              <Divider />
+              <Card>
+                <Table
+                  rowKey="CourseID"
+                  columns={columns}
+                  dataSource={cartItems}
+                  pagination={{ pageSize: 2 }} // Limit to 2 courses per page
+                />
+              </Card>
+            </div>
+          </Col>
+
+          {/* Order Summary Section */}
+          <Col span={12}>
+            <div className="cart-order">
+              <h2><FileDoneOutlined /> Order Summary</h2>
+              <Divider />
+              <Card>
+                <p>ITEMS 3 Total: $590</p>
+                <p>Item1: name1</p>
+                <p>Item2: name2</p>
+                <p>Item3: name3</p>
+              </Card>
+            </div><br />
+            <Button>CHECKOUT</Button>
+          </Col>
+        </Row>
       </div>
     </>
   );
