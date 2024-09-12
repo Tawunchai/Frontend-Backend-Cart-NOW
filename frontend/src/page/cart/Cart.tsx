@@ -1,100 +1,166 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { ShopContext } from '../../context/shop_context';
-import { CartItem } from './CartItem';
-import { getAllCart, deleteCart, getCourseById } from '../../services/http';
-import { CartInterface } from '../../interface/ICart';
-import { CourseInterface } from '../../interface/ICourse';
-import { useNavigate } from 'react-router-dom';
-import './cart.css';
+import { useState, useEffect } from "react";
+import { Space, Table, Button, Col, Row, Divider, Modal, message } from "antd";
+import { PlusOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons";
+import type { ColumnsType } from "antd/es/table";
+import { getAllCart, deleteCart, getCourseById } from "../../services/http";
+import { CartInterface } from "../../interface/ICart";
+import { Link, useNavigate } from "react-router-dom";
 
-const Cart: React.FC = () => {
-  const shopContext = useContext(ShopContext);
-  const [cartItemsData, setCartItemsData] = useState<CartInterface[]>([]);
-  const [courses, setCourses] = useState<{ [key: number]: CourseInterface }>({});
+interface CartWithCourse extends CartInterface {
+  Title?: string;
+  Price?: number;
+  ProfilePicture?: string;
+}
+
+function Cart() {
+  const [cartItems, setCartItems] = useState<CartWithCourse[]>([]);
+  const [messageApi, contextHolder] = message.useMessage();
+  const [open, setOpen] = useState(false);
+  const [confirmLoading, setConfirmLoading] = useState(false);
+  const [modalText, setModalText] = useState<string>("");
+  const [deleteCourseID, setDeleteCourseID] = useState<number | undefined>(undefined);
+
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchCartData = async () => {
-      try {
-        const cartData = await getAllCart();
-        setCartItemsData(cartData);
-
-        // Fetch course details for each course ID in the cart
-        const coursePromises = cartData.map(item => getCourseById(item.CourseID!));
-        const coursesData = await Promise.all(coursePromises);
-
-        // Map course data to their IDs
-        const coursesMap = coursesData.reduce((acc, course) => {
-          if (course.ID) {
-            acc[course.ID] = course;
-          }
-          return acc;
-        }, {} as { [key: number]: CourseInterface });
-
-        setCourses(coursesMap);
-      } catch (error) {
-        console.error("Error fetching cart data or course details:", error);
-      }
-    };
-
-    fetchCartData();
-  }, []);
-
-  const handleRemove = async (courseID: number) => {
+  const getCartItems = async () => {
     try {
-      await deleteCart(courseID); // Call the delete API
-      shopContext?.removeFromCart(courseID); // Update context
-      setCartItemsData(prev => prev.filter(item => item.CourseID !== courseID));
+      const carts = await getAllCart();
+      const cartWithCourses: CartWithCourse[] = await Promise.all(
+        carts.map(async (cart) => {
+          const course = await getCourseById(cart.CourseID!); // Assuming CourseID is always provided
+          return {
+            ...cart,
+            Title: course.Title,
+            Price: course.Price,
+            ProfilePicture: course.ProfilePicture,
+          };
+        })
+      );
+      setCartItems(cartWithCourses);
     } catch (error) {
-      console.error('Failed to remove cart item:', error);
+      messageApi.open({
+        type: "error",
+        content: "Failed to fetch cart items!",
+      });
     }
   };
 
-  if (!shopContext) {
-    return null; // or a fallback UI
-  }
+  const showModal = (courseID: number) => {
+    setModalText(`คุณต้องการลบข้อมูลคอร์สที่มี ID "${courseID}" หรือไม่ ?`);
+    setDeleteCourseID(courseID);
+    setOpen(true);
+  };
 
-  const { getTotalCartAmount } = shopContext;
+  const handleOk = async () => {
+    if (deleteCourseID === undefined) return;
 
-  // Calculate the total amount based on the latest course prices
-  const totalAmount = cartItemsData.reduce((total, item) => {
-    const course = courses[item.CourseID!];
-    const price = course?.Price ?? 0; // Use nullish coalescing to default to 0 if price is undefined
-    return total + price;
-  }, 0);
+    setConfirmLoading(true);
+    try {
+      await deleteCart(deleteCourseID);
+      setOpen(false);
+      messageApi.open({
+        type: "success",
+        content: "Removed item from cart successfully",
+      });
+      getCartItems();
+    } catch (error) {
+      messageApi.open({
+        type: "error",
+        content: "Failed to remove cart item",
+      });
+      setOpen(false);
+    }
+    setConfirmLoading(false);
+  };
+
+  const handleCancel = () => {
+    setOpen(false);
+  };
+
+  useEffect(() => {
+    getCartItems();
+  }, []);
+
+  const columns: ColumnsType<CartWithCourse> = [
+    {
+      title: "ลำดับ",
+      dataIndex: "CourseID",
+      key: "CourseID",
+    },
+    {
+      title: "ชื่อคอร์ส",
+      dataIndex: "Title",
+      key: "Title",
+      render: (text) => text || "No Title",
+    },
+    {
+      title: "ราคา",
+      dataIndex: "Price",
+      key: "Price",
+      render: (text) => `$${text?.toFixed(2) || "0.00"}`,
+    },
+    {
+      title: "รูปภาพ",
+      dataIndex: "ProfilePicture",
+      key: "ProfilePicture",
+      render: (text) => <img alt="course" src={text} style={{ width: "100px", borderRadius: "15px" }} />,
+    },
+    {
+      title: "จัดการ",
+      key: "Manage",
+      render: (_, record) => (
+        <>
+          <Button
+            onClick={() => navigate(`/cart/edit/${record.CourseID}`)}
+            shape="circle"
+            icon={<EditOutlined />}
+            size={"large"}
+          />
+          <Button
+            onClick={() => showModal(record.CourseID!)} // Ensure CourseID is defined
+            style={{ marginLeft: 10 }}
+            shape="circle"
+            icon={<DeleteOutlined />}
+            size={"large"}
+            danger
+          />
+        </>
+      ),
+    },
+  ];
 
   return (
-    <div className='cart'>
-      <div className='top-text'>
-        <h1>Course Cart</h1>
+    <>
+      {contextHolder}
+      <Row>
+        <Col span={12}>
+          <h2>จัดการข้อมูลตะกร้า</h2>
+        </Col>
+        <Col span={12} style={{ textAlign: "end", alignSelf: "center" }}>
+          <Space>
+            <Link to="/cart/create">
+              <Button type="primary" icon={<PlusOutlined />}>
+                เพิ่มข้อมูลคอร์ส
+              </Button>
+            </Link>
+          </Space>
+        </Col>
+      </Row>
+      <Divider />
+      <div style={{ marginTop: 20 }}>
+        <Table rowKey="CourseID" columns={columns} dataSource={cartItems} />
       </div>
-      <div className='cart-items'>
-        {cartItemsData.map((item) => {
-          const course = courses[item.CourseID!]; // Get course details
-          if (course) {
-            return (
-              <CartItem
-                key={item.CourseID}
-                data={{
-                  id: item.CourseID!,
-                  title: course.Title || "No Title",
-                  price: course.Price ?? 0, // Use nullish coalescing to default to 0 if price is undefined
-                  profile: course.ProfilePicture || 'Course Image URL',
-                  productName: course.Name || 'Product Name',
-                }}
-                onRemove={() => handleRemove(item.CourseID!)}
-              />
-            );
-          }
-          return null;
-        })}
-      </div>
-      <div className='total'>
-        <h3>Total Amount: ${totalAmount.toFixed(2)}</h3>
-      </div>
-      <button className='checkout-button' onClick={() => navigate('/checkout')}>Proceed to Checkout</button>
-    </div>
+      <Modal
+        title="ลบข้อมูล ?"
+        open={open}
+        onOk={handleOk}
+        confirmLoading={confirmLoading}
+        onCancel={handleCancel}
+      >
+        <p>{modalText}</p>
+      </Modal>
+    </>
   );
-};
+}
 
 export default Cart;
