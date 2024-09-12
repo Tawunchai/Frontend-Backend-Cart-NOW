@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { Space, Table, Button, Col, Row, Divider, Modal, message } from "antd";
+import React, { useState, useEffect } from "react";
+import { Space, Table, Button, Col, Row, Divider, message } from "antd";
 import { PlusOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import type { ColumnsType } from "antd/es/table";
 import { getAllCart, deleteCart, getCourseById } from "../../services/http";
@@ -15,10 +15,7 @@ interface CartWithCourse extends CartInterface {
 function Cart() {
   const [cartItems, setCartItems] = useState<CartWithCourse[]>([]);
   const [messageApi, contextHolder] = message.useMessage();
-  const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
-  const [modalText, setModalText] = useState<string>("");
-  const [deleteCourseID, setDeleteCourseID] = useState<number | undefined>(undefined);
 
   const navigate = useNavigate();
 
@@ -45,19 +42,10 @@ function Cart() {
     }
   };
 
-  const showModal = (courseID: number) => {
-    setModalText(`คุณต้องการลบข้อมูลคอร์สที่มี ID "${courseID}" หรือไม่ ?`);
-    setDeleteCourseID(courseID);
-    setOpen(true);
-  };
-
-  const handleOk = async () => {
-    if (deleteCourseID === undefined) return;
-
+  const handleDelete = async (courseID: number) => {
     setConfirmLoading(true);
     try {
-      await deleteCart(deleteCourseID);
-      setOpen(false);
+      await deleteCart(courseID);
       messageApi.open({
         type: "success",
         content: "Removed item from cart successfully",
@@ -68,13 +56,8 @@ function Cart() {
         type: "error",
         content: "Failed to remove cart item",
       });
-      setOpen(false);
     }
     setConfirmLoading(false);
-  };
-
-  const handleCancel = () => {
-    setOpen(false);
   };
 
   useEffect(() => {
@@ -83,48 +66,40 @@ function Cart() {
 
   const columns: ColumnsType<CartWithCourse> = [
     {
-      title: "ลำดับ",
+      title: "ID",
       dataIndex: "CourseID",
       key: "CourseID",
     },
     {
-      title: "ชื่อคอร์ส",
+      title: "Title",
       dataIndex: "Title",
       key: "Title",
       render: (text) => text || "No Title",
     },
     {
-      title: "ราคา",
+      title: "Price",
       dataIndex: "Price",
       key: "Price",
       render: (text) => `$${text?.toFixed(2) || "0.00"}`,
     },
     {
-      title: "รูปภาพ",
+      title: "Picture",
       dataIndex: "ProfilePicture",
       key: "ProfilePicture",
-      render: (text) => <img alt="course" src={text} style={{ width: "100px", borderRadius: "15px" }} />,
+      render: (text) => <img alt="course" src={text} style={{ width: "150px" }} />,
     },
     {
-      title: "จัดการ",
+      title: "Delete",
       key: "Manage",
       render: (_, record) => (
-        <>
-          <Button
-            onClick={() => navigate(`/cart/edit/${record.CourseID}`)}
-            shape="circle"
-            icon={<EditOutlined />}
-            size={"large"}
-          />
-          <Button
-            onClick={() => showModal(record.CourseID!)} // Ensure CourseID is defined
-            style={{ marginLeft: 10 }}
-            shape="circle"
-            icon={<DeleteOutlined />}
-            size={"large"}
-            danger
-          />
-        </>
+        <Button
+          onClick={() => handleDelete(record.CourseID!)} // Call handleDelete directly
+          style={{ marginLeft: 10 }}
+          shape="circle"
+          icon={<DeleteOutlined />}
+          size={"large"}
+          danger
+        />
       ),
     },
   ];
@@ -134,31 +109,13 @@ function Cart() {
       {contextHolder}
       <Row>
         <Col span={12}>
-          <h2>จัดการข้อมูลตะกร้า</h2>
-        </Col>
-        <Col span={12} style={{ textAlign: "end", alignSelf: "center" }}>
-          <Space>
-            <Link to="/cart/create">
-              <Button type="primary" icon={<PlusOutlined />}>
-                เพิ่มข้อมูลคอร์ส
-              </Button>
-            </Link>
-          </Space>
+          <h2>Cart Course</h2>
         </Col>
       </Row>
       <Divider />
       <div style={{ marginTop: 20 }}>
         <Table rowKey="CourseID" columns={columns} dataSource={cartItems} />
       </div>
-      <Modal
-        title="ลบข้อมูล ?"
-        open={open}
-        onOk={handleOk}
-        confirmLoading={confirmLoading}
-        onCancel={handleCancel}
-      >
-        <p>{modalText}</p>
-      </Modal>
     </>
   );
 }
