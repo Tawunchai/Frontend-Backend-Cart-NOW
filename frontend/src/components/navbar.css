@@ -1,6 +1,6 @@
 .navbar {
   width: 97%;
-  height: 80px;
+  height: 70px;
   background-color: #333D51;
   display: flex;
   justify-content: space-between;
@@ -9,7 +9,7 @@
 }
 
 .logo {
-  width: 130px;
+  width: 120px;
   margin-top: 12px;
 }
 

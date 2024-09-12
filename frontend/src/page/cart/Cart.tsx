@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Space, Table, Button, Col, Row, message, Card, Divider } from "antd";
-import { DeleteOutlined, ShoppingOutlined, FileDoneOutlined } from "@ant-design/icons";
+import {
+  DeleteOutlined,
+  ShoppingOutlined,
+  FileDoneOutlined,
+} from "@ant-design/icons";
 import type { ColumnsType } from "antd/es/table";
 import { getAllCart, deleteCart, getCourseById } from "../../services/http";
 import { CartInterface } from "../../interface/ICart";
@@ -70,20 +74,34 @@ function Cart() {
       dataIndex: "ProfilePicture",
       key: "ProfilePicture",
       render: (text) => (
-        <img alt="course" src={text} style={{ width: "150px"}} />
+        <img
+          alt="course"
+          src={text}
+          style={{ width: "150px", height: "150px" }}
+        />
       ),
     },
     {
       title: "Title",
       dataIndex: "Title",
       key: "Title",
-      render: (text) => <span style={{color: "#808080",fontWeight:"bolder",fontSize:"15px"}}>{text || "No Title"}</span>,
+      render: (text) => (
+        <span
+          style={{ color: "#808080", fontWeight: "bolder", fontSize: "15px" }}
+        >
+          {text || "No Title"}
+        </span>
+      ),
     },
     {
       title: "Price",
       dataIndex: "Price",
       key: "Price",
-      render: (text) => <span style={{color: "#D3AC2B",fontWeight:"bold"}}>${text?.toFixed(2) || "0.00"}</span>,
+      render: (text) => (
+        <span style={{ color: "#D3AC2B", fontWeight: "bold" }}>
+          ${text?.toFixed(2) || "0.00"}
+        </span>
+      ),
     },
     {
       title: "Delete",
@@ -108,9 +126,9 @@ function Cart() {
         <Row gutter={16}>
           <Col span={12}>
             <div className="cart-course">
-              <h2>
+              <h1>
                 <ShoppingOutlined /> Cart Course
-              </h2>
+              </h1>
               <Divider />
               <Card>
                 <Table
@@ -126,25 +144,51 @@ function Cart() {
           {/* Order Summary Section */}
           <Col span={12}>
             <div className="cart-order">
-              <h2>
+              <h1>
                 <FileDoneOutlined /> Order Summary
-              </h2>
+              </h1>
               <Divider />
               <Card>
                 {cartItems.length === 0 ? (
                   <p>Your cart is empty. Keep shopping to find a course!</p>
                 ) : (
                   <>
-                    <p style={{fontSize:"20px",fontWeight:"bold",color:"#363434"}}>
+                    <p
+                      style={{
+                        fontSize: "20px",
+                        fontWeight: "bold",
+                        color: "#363434",
+                      }}
+                    >
                       ITEMS {cartItems.length} :
                     </p>
-                    {cartItems.map((item, index) => (
-                      <p style={{fontSize:"16px",fontFamily:"initial"}} key={item.CourseID}>
+                    {cartItems.slice(0, 3).map((item, index) => (
+                      <p
+                        style={{ fontSize: "16px", fontFamily: "initial" }}
+                        key={item.CourseID}
+                      >
                         {`${index + 1}. ${item.Title || "No Title"}`}
                       </p>
                     ))}
-                    <p style={{fontSize:"24px",fontWeight:"bold",color:"#D3AC2B"}}>
-                      TOTAL : $ 
+                    {cartItems.length > 3 && (
+                      <p
+                        style={{
+                          fontSize: "16px",
+                          fontFamily: "initial",
+                          fontStyle: "normal",
+                        }}
+                      >
+                        Other Courses...
+                      </p>
+                    )}
+                    <p
+                      style={{
+                        fontSize: "24px",
+                        fontWeight: "bold",
+                        color: "#D3AC2B",
+                      }}
+                    >
+                      TOTAL : $
                       {cartItems
                         .reduce((total, item) => total + (item.Price || 0), 0)
                         .toFixed(2)}
@@ -154,7 +198,16 @@ function Cart() {
               </Card>
             </div>
             <br />
-            <Button style={{ width: "300px", height: "55px", backgroundColor: "#4E6799", fontSize: "22px", color: "white",fontWeight:"bolder" }}>
+            <Button
+              style={{
+                width: "300px",
+                height: "55px",
+                backgroundColor: "#4E6799",
+                fontSize: "22px",
+                color: "white",
+                fontWeight: "bolder",
+              }}
+            >
               CHECKOUT
             </Button>
           </Col>
