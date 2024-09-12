@@ -1,89 +1,35 @@
-.cart {
+/* Cart.css */
+.cart-payment {
+  width: 100%;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 20px;
+  justify-content: space-between;
+}
+
+.cart-course,
+.cart-order {
   width: 100%;
 }
 
-.cart-items {
-  display: flex;
-  flex-direction: column;
+.cart-course .ant-card,
+.cart-order .ant-card {
   width: 100%;
-  max-height: 600px; /* Adjust based on your preference */
-  overflow-y: auto; /* Enables vertical scrolling */
+  min-height: 300px;
+  overflow: hidden;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Card shadow for better visuals */
 }
 
-.cart-item {
-  width: 500px;
-  max-width: 800px; /* Adjust width as needed */
-  display: flex;
-  flex-direction: column; /* Change from row to column for a stacked layout */
-  align-items: center;
-  box-shadow: 0px 3px 15px rgba(0, 0, 0, 0.2);
-  border-radius: 25px;
-  margin: 15px 0; /* Adjust margin as needed */
+.cart-order {
+  padding: 10px;
 }
 
-.cart-item .cart-item-content {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  width: 100%;
-}
-
-.cart-item img {
-  border-radius: 15px; /* Apply border-radius to the image */
-  width: 200px; /* Adjust width as needed */
-  height: auto; /* Maintain aspect ratio */
-  margin-left: 20px;
-}
-
-.cart-item .description {
-  flex: 1;
-  margin-left: 20px;
-  font-size: 18px;
-}
-
-.Remove-button {
-  background-color: rgba(217, 160, 14, 0.848);
-  border: none;
-  color: aliceblue;
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-  font-size: 18px;
-  min-width: 120px;
-  padding: 5px 10px;
-  border-radius: 15px;
-  margin-left: 25px;
-}
-
-.Remove-button:hover {
-  background-color: rgb(19, 19, 19);
-  color: white;
-  cursor: pointer;
-}
-
-.checkout {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 20px;
-}
-
-.text-lang-total {
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-  color: rgb(157, 143, 65);
-  font-size: 28px;
+.cart-order-summary {
+  font-size: 16px;
   margin-bottom: 10px;
 }
 
-.checkout button {
-  width: 150px;
-  height: 50px;
-  background-color: rgb(19, 19, 19);
-  color: white;
-  border: none;
-  border-radius: 8px;
-  margin-top: 10px;
-  cursor: pointer;
+.cart-order .ant-card p {
+  margin: 5px 0;
+  font-size: 16px;
+  color: #333; /* Darker text for better readability */
 }
+

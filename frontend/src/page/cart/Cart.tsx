@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Space, Table, Button, Col, Row, Divider, message, Card } from "antd";
+import { Space, Table, Button, Col, Row, message, Card } from "antd";
 import {
-  PlusOutlined,
-  EditOutlined,
   DeleteOutlined,
   ShoppingOutlined,
   FileDoneOutlined,
@@ -123,7 +121,6 @@ function Cart() {
               <h2>
                 <ShoppingOutlined /> Cart Course
               </h2>
-              <Divider />
               <Card>
                 <Table
                   rowKey="CourseID"
@@ -138,16 +135,34 @@ function Cart() {
           {/* Order Summary Section */}
           <Col span={12}>
             <div className="cart-order">
-              <h2><FileDoneOutlined /> Order Summary</h2>
-              <Divider />
+              <h2>
+                <FileDoneOutlined /> Order Summary
+              </h2>
               <Card>
-                <p>ITEMS 3 Total: $590</p>
-                <p>Item1: name1</p>
-                <p>Item2: name2</p>
-                <p>Item3: name3</p>
+                {cartItems.length === 0 ? (
+                  <p>Your cart is empty. Keep shopping to find a course!</p>
+                ) : (
+                  <>
+                    <p>
+                      ITEMS {cartItems.length} :
+                    </p>
+                    {cartItems.map((item, index) => (
+                      <p key={item.CourseID}>
+                        {`${index + 1}. ${item.Title || "No Title"}`}
+                      </p>
+                    ))}
+                    <p>
+                      Total: $
+                      {cartItems
+                        .reduce((total, item) => total + (item.Price || 0), 0)
+                        .toFixed(2)}
+                    </p>
+                  </>
+                )}
               </Card>
-            </div><br />
-            <Button>CHECKOUT</Button>
+            </div>
+            <br />
+            <Button className="checkout">CHECKOUT</Button>
           </Col>
         </Row>
       </div>
