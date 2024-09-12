@@ -1,7 +1,7 @@
 .navbar {
   width: 97%;
-  height: 95px;
-  background-color: rgb(19, 19, 19);
+  height: 80px;
+  background-color: #333D51;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -9,7 +9,7 @@
 }
 
 .logo {
-  width: 145px;
+  width: 130px;
   margin-top: 12px;
 }
 

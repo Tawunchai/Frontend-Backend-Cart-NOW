@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Space, Table, Button, Col, Row, message, Card } from "antd";
+import { Space, Table, Button, Col, Row, message, Card,Divider } from "antd";
 import {
   DeleteOutlined,
   ShoppingOutlined,
@@ -115,12 +115,12 @@ function Cart() {
       {contextHolder}
       <div className="cart-payment">
         <Row gutter={16}>
-          {/* Cart Course Section */}
           <Col span={12}>
             <div className="cart-course">
               <h2>
                 <ShoppingOutlined /> Cart Course
               </h2>
+              <Divider />
               <Card>
                 <Table
                   rowKey="CourseID"
@@ -138,6 +138,7 @@ function Cart() {
               <h2>
                 <FileDoneOutlined /> Order Summary
               </h2>
+              <Divider />
               <Card>
                 {cartItems.length === 0 ? (
                   <p>Your cart is empty. Keep shopping to find a course!</p>
@@ -162,7 +163,7 @@ function Cart() {
               </Card>
             </div>
             <br />
-            <Button className="checkout">CHECKOUT</Button>
+            <Button style={{width: "200px",height:"40px",backgroundColor:"#4E6799",fontSize:"22px",color:"white"}}>CHECKOUT</Button>
           </Col>
         </Row>
       </div>
