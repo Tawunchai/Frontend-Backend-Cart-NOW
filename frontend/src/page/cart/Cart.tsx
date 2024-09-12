@@ -1,10 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Space, Table, Button, Col, Row, message, Card,Divider } from "antd";
-import {
-  DeleteOutlined,
-  ShoppingOutlined,
-  FileDoneOutlined,
-} from "@ant-design/icons";
+import { Space, Table, Button, Col, Row, message, Card, Divider } from "antd";
+import { DeleteOutlined, ShoppingOutlined, FileDoneOutlined } from "@ant-design/icons";
 import type { ColumnsType } from "antd/es/table";
 import { getAllCart, deleteCart, getCourseById } from "../../services/http";
 import { CartInterface } from "../../interface/ICart";
@@ -70,29 +66,24 @@ function Cart() {
 
   const columns: ColumnsType<CartWithCourse> = [
     {
-      title: "ID",
-      dataIndex: "CourseID",
-      key: "CourseID",
+      title: "Course",
+      dataIndex: "ProfilePicture",
+      key: "ProfilePicture",
+      render: (text) => (
+        <img alt="course" src={text} style={{ width: "150px"}} />
+      ),
     },
     {
       title: "Title",
       dataIndex: "Title",
       key: "Title",
-      render: (text) => text || "No Title",
+      render: (text) => <span style={{color: "#808080",fontWeight:"bolder",fontSize:"15px"}}>{text || "No Title"}</span>,
     },
     {
       title: "Price",
       dataIndex: "Price",
       key: "Price",
-      render: (text) => `$${text?.toFixed(2) || "0.00"}`,
-    },
-    {
-      title: "Picture",
-      dataIndex: "ProfilePicture",
-      key: "ProfilePicture",
-      render: (text) => (
-        <img alt="course" src={text} style={{ width: "150px" }} />
-      ),
+      render: (text) => <span style={{color: "#D3AC2B",fontWeight:"bold"}}>${text?.toFixed(2) || "0.00"}</span>,
     },
     {
       title: "Delete",
@@ -144,16 +135,16 @@ function Cart() {
                   <p>Your cart is empty. Keep shopping to find a course!</p>
                 ) : (
                   <>
-                    <p>
+                    <p style={{fontSize:"20px",fontWeight:"bold",color:"#363434"}}>
                       ITEMS {cartItems.length} :
                     </p>
                     {cartItems.map((item, index) => (
-                      <p key={item.CourseID}>
+                      <p style={{fontSize:"16px",fontFamily:"initial"}} key={item.CourseID}>
                         {`${index + 1}. ${item.Title || "No Title"}`}
                       </p>
                     ))}
-                    <p>
-                      Total: $
+                    <p style={{fontSize:"24px",fontWeight:"bold",color:"#D3AC2B"}}>
+                      TOTAL : $ 
                       {cartItems
                         .reduce((total, item) => total + (item.Price || 0), 0)
                         .toFixed(2)}
@@ -163,7 +154,9 @@ function Cart() {
               </Card>
             </div>
             <br />
-            <Button style={{width: "200px",height:"40px",backgroundColor:"#4E6799",fontSize:"22px",color:"white"}}>CHECKOUT</Button>
+            <Button style={{ width: "300px", height: "55px", backgroundColor: "#4E6799", fontSize: "22px", color: "white",fontWeight:"bolder" }}>
+              CHECKOUT
+            </Button>
           </Col>
         </Row>
       </div>
